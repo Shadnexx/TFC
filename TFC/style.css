@@ -1,16 +1,13 @@
-/* styles.css */
-
-/* Importar fuentes */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
-/* Estilos base */
+
 body {
     background-color: #1a1a2e;
     font-family: 'VT323', monospace;
     color: #f1f1f1;
     overflow-x: hidden;
 }
-/* Efecto CRT */
+
 .crt-effect {
     position: fixed;
     top: 0;
@@ -24,7 +21,7 @@ body {
     z-index: 100;
     opacity: 0.5;
 }
-/* Animaciones */
+
 @keyframes flicker {
     0% { opacity: 0.9; }
     5% { opacity: 0.5; }
@@ -33,7 +30,6 @@ body {
     20% { opacity: 0.9; }
     100% { opacity: 1; }
 }
-/* Clases reutilizables */
 .flicker {
     animation: flicker 5s infinite;
 }
