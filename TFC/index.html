@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Video Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="relative">
+    <div class="crt-effect"></div>
+    <div class="scanlines"></div>
+    <header class="bg-blue-600 py-4 px-4 sticky topz-50">
+        <div class="container w-auto h-auto mx-auto flex justify-between items-center">
+            <h1 class="text-4xl md:text-5xl text-yellow-400 font-bold flicker glow-text font-press-start text-center flex-grow">
+                <p class="text-center"><i class="fas fa-video mr-3"></i> VIDEOCLUB <i class="fas fa-video fa-flip-horizontal mr-3"></i></p>
+            </h1>
+            <div class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
+                <i class="fas fa-clock mr-1"></i> OPEN 24H
+            </div>
+            <div class="bg-gradient-to-r from-green-600 to-green-800 text-white px-3 py-1 rounded-md text-xl mx-4 cursor-pointer hover:scale-105 transition-transform">
+            <i class="fas fa-search mr-1"></i> SEARCH
+        </div>
+        </div>
+    </header>
+        <div class="bg-black py-2 border-y-4 border-pink-500 mtb-7 overflow-hidden">
+            <ul class="flex animate-marquee text-2xl text-pink-400 space-x-8 items-center px-4">
+            <li class="flex-shrink-0"><i class="fas fa-film"></i> NEW ARRIVALS</li>
+            <li class="flex-shrink-0"><i class="fas fa-star"></i> CLASSIC MOVIES</li>
+            <li class="flex-shrink-0"><i class="fas fa-film"></i> SCI-FI & FANTASY</li>
+            <li class="flex-shrink-0"><i class="fas fa-star"></i> ACTION & ADVENTURE</li>
+            <li class="flex-shrink-0"><i class="fas fa-film"></i> NEW ARRIVALS</li>
+            <li class="flex-shrink-0"><i class="fas fa-star"></i> CLASSIC MOVIES</li>
+            <li class="flex-shrink-0"><i class="fas fa-film"></i> SCI-FI & FANTASY</li>
+            <li class="flex-shrink-0"><i class="fas fa-star"></i> ACTION & ADVENTURE</li>
+            </ul>
+            <style>
+            .animate-marquee {
+                display: flex;
+                animation: marquee 15s linear infinite;
+            }
+
+            @keyframes marquee {
+                0% {
+                transform: translateX(100%);
+                }
+                100% {
+                transform: translateX(-100%);
+                }
+            }
+            </style>
+        </div>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-6 grid-pattern">
+
+            <!-- Sci-Fi Section -->
+            <section class="mb-12">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl text-blue-400 border-b-2 border-blue-400 pb-1 inline-block">
+                        <i class="fas fa-rocket mr-2"></i> SCI-FI & FANTASY
+                    </h2>
+                    <div class="text-xl text-white bg-purple-800 px-4 py-1 rounded-full">
+                        <i class="fas fa-jedi mr-2"></i> OUT OF THIS WORLD
+                    </div>
+                </div>
+                <!--HAY QUE HACER CLASES EN EL CSS PARA NO ESCRIBIR LOS ATRI TODO EL-->
+                <div class="shelf bg-gradient-to-b from-indigo-900 to-indigo-800 p-6 rounded-lg mb-8 relative">
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <!-- Sci-Fi VHS Tapes -->
+                        <div class="vhs-tape bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-3 relative h-64 flex flex-col cursor-pointer">
+                            <div class="flex-grow min-h-0 bg-black border-2 border-gray-600 flex flex-col overflow-hidden">
+                                <a href="/movies/movies.html" class="flex-shrink-0 h-3/4 overflow-hidden">
+                                    <img src="/imagenes/portada.jpg" alt="Movie Cover"
+                                         class="h-full w-full object-cover object-top">
+                                </a>
+                                <div class="p-2 mt-auto text-center">
+                                    <h3 class="text-white font-bold truncate">EL CASTILLO AMBULANTE</h3>
+                                    <p class="text-yellow-400 text-sm line-clamp-2">1977 • PG • $3.99</p>
+                                </div>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-red-600 text-white text-xs px-1 rounded">VHS</div>
+                        </div>
+
+                        <div class="vhs-tape bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-3 relative h-64 flex flex-col cursor-pointer">
+                            <div class="flex-grow bg-black border-2 border-gray-600 flex items-center justify-center">
+                                <img src="/imagenes/portada.jpg" alt="Movie Cover" class="h-full w-full object-cover">
+                            </div>
+                            <div class="mt-2 text-center">
+                                <h3 class="text-white font-bold truncate">THE FIFTH ELEMENT</h3>
+                                <p class="text-yellow-400 text-sm">1997 • PG-13 • $3.99</p>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-red-600 text-white text-xs px-1 rounded">VHS</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-black text-white py-8 px-6 border-t-4 border-yellow-500">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-2xl text-yellow-400 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2"></i> FIND US
+                        </h3>
+                        <p class="mb-2">123 Nostalgia Ave</p>
+                        <p class="mb-2">Retro City, RC 90210</p>
+                        <p>Phone: (555) VHS-CLUB</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl text-yellow-400 mb-4">
+                            <i class="fas fa-clock mr-2"></i> HOURS
+                        </h3>
+                        <p class="mb-2">Mon-Fri: 10am - 10pm</p>
+                        <p class="mb-2">Sat: 9am - Midnight</p>
+                        <p>Sun: 11am - 9pm</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl text-yellow-400 mb-4">
+                            <i class="fas fa-info-circle mr-2"></i> ABOUT
+                        </h3>
+                        <p class="mb-4">Since 1985, we've been your go-to spot for the best in home entertainment.</p>
+                        <div class="flex space-x-4 text-2xl">
+                            <a href="#" class="text-blue-400 hover:text-blue-300"><i class="fab fa-facebook hover:scale-110"></i></a>
+                            <a href="#" class="text-pink-400 hover:text-pink-300"><i class="fab fa-instagram hover:scale-110"></i></a>
+                            <a href="#" class="text-red-400 hover:text-red-300"><i class="fab fa-youtube hover:scale-110"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-700 text-center">
+                    <p class="text-gray-400">
+                        &copy; 1993 Retro Video Club. All rights reserved. Be kind, rewind!
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!--
+        <div id="membershipPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+            <div class="bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-6 max-w-md w-full border-4 border-yellow-500 relative">
+                <button onclick="closePopup()" class="absolute top-2 right-2 text-white text-xl hover:text-yellow-400">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="text-3xl text-yellow-400 mb-4 text-center">
+                    <i class="fas fa-id-card mr-2"></i> GET YOUR MEMBERSHIP
+                </h2>
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-white mb-1">Name</label>
+                        <input type="text" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-white mb-1">Email</label>
+                        <input type="email" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-white mb-1">Phone</label>
+                        <input type="tel" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white">
+                    </div>
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded transition duration-300">
+                            JOIN NOW <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-4 text-center text-sm text-gray-400">
+                    <p>Members get 10% off all rentals and free popcorn every Friday!</p>
+                </div>
+            </div>
+        </div>
+
+        Rewind Button
+        <div class="fixed bottom-6 right-6 z-40">
+            <button onclick="openPopup()" class="bg-red-600 hover:bg-red-700 text-white text-xl p-4 rounded-full shadow-lg transform hover:scale-110 transition duration-300">
+                <i class="fas fa-rewind"></i>
+            </button>
+        </div>
+        -->
+        <script>
+            // Membership popup functions
+            //function openPopup() {
+            //    document.getElementById('membershipPopup').classList.remove('hidden');
+            //}
+
+            //function closePopup() {
+            //    document.getElementById('membershipPopup').classList.add('hidden');
+            //}
+
+            // VHS tape hover effect enhancement
+            document.querySelectorAll('.vhs-tape').forEach(tape => {
+                tape.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px) rotateY(15deg)';
+                    this.style.boxShadow = '0 15px 25px rgba(255, 215, 0, 0.5)';
+                });
+
+                tape.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) rotateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Add static noise effect to header
+            const header = document.querySelector('header');
+            setInterval(() => {
+                header.style.backgroundPosition = `${Math.random() * 100}% ${Math.random() * 100}%`;
+            }, 100);
+        </script>
+    </body>
+</html>

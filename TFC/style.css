@@ -1,0 +1,81 @@
+/* styles.css */
+
+/* Importar fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+/* Estilos base */
+body {
+    background-color: #1a1a2e;
+    font-family: 'VT323', monospace;
+    color: #f1f1f1;
+    overflow-x: hidden;
+}
+/* Efecto CRT */
+.crt-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.5;
+}
+/* Animaciones */
+@keyframes flicker {
+    0% { opacity: 0.9; }
+    5% { opacity: 0.5; }
+    10% { opacity: 0.95; }
+    15% { opacity: 0.27; }
+    20% { opacity: 0.9; }
+    100% { opacity: 1; }
+}
+/* Clases reutilizables */
+.flicker {
+    animation: flicker 5s infinite;
+}
+
+.glow-text {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073;
+}
+
+.vhs-tape {
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.shelf {
+    box-shadow: inset 0 -20px 20px rgba(0, 0, 0, 0.5);
+    border-bottom: 3px solid #8B4513;
+}
+
+.scanlines {
+    background: linear-gradient(
+        to bottom,
+        transparent 95%,
+        rgba(0, 0, 0, 0.3) 96%
+    );
+    background-size: 100% 3px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Fuentes personalizadas */
+.font-press-start {
+    font-family: 'Press Start 2P', cursive;
+}
+.grid-pattern {
+    background-image:
+        linear-gradient(rgba(5, 217, 232, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 217, 232, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
