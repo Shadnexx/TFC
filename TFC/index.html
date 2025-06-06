@@ -1,146 +1,489 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Video Club</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Video Club</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'press-start': ['"Press Start 2P"', 'cursive'],
+            'vt323': ['VT323', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+        
+    body {
+      background-color: #1a1a2e;
+      font-family: 'VT323', monospace;
+      color: #f1f1f1;
+      overflow-x: hidden;
+    }
+
+    .crt-effect {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.9; }
+      5% { opacity: 0.5; }
+      10% { opacity: 0.95; }
+      15% { opacity: 0.27; }
+      20% { opacity: 0.9; }
+      100% { opacity: 1; }
+    }
+    .flicker {
+      animation: flicker 5s infinite;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073;
+    }
+
+    .vhs-tape {
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .shelf {
+      box-shadow: inset 0 -20px 20px rgba(0, 0, 0, 0.5);
+      border-bottom: 3px solid #8B4513;
+    }
+
+    .scanlines {
+      background: linear-gradient(
+        to bottom,
+        transparent 95%,
+        rgba(0, 0, 0, 0.3) 96%
+      );
+      background-size: 100% 3px;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(5, 217, 232, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 217, 232, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .animate-marquee {
+      display: flex;
+      animation: marquee 15s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Redesigned search modal to be more subtle */
+    .search-modal {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      justify-content: center;
+    }
+
+    .search-container {
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #4f46e5;
+      border-radius: 4px;
+      width: 60%;
+      max-width: 600px;
+      padding: 0.5rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-input {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      padding: 0.5rem;
+      width: 100%;
+      font-family: 'VT323', monospace;
+      outline: none;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #a78bfa;
+      box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+    }
+
+    .close-search {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body class="relative">
-    <div class="crt-effect"></div>
-    <div class="scanlines"></div>
-    <header class="bg-blue-600 py-4 px-4 sticky topz-50">
-        <div class="container w-auto h-auto mx-auto flex justify-between items-center">
-            <h1 class="text-4xl md:text-5xl text-yellow-400 font-bold flicker glow-text font-press-start text-center flex-grow">
-                <p class="text-center"><i class="fas fa-video mr-3"></i> VIDEOCLUB <i class="fas fa-video fa-flip-horizontal mr-3"></i></p>
-            </h1>
-            <div class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
-                <i class="fas fa-clock mr-1"></i> OPEN 24H
+  <div class="crt-effect"></div>
+  <div class="scanlines"></div>
+
+  <!-- Modal de búsqueda -->
+  <div id="searchModal" class="search-modal">
+    <div class="search-container relative">
+      <span class="close-search" id="closeSearch">&times;</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Type movie title..." autocomplete="off">
+    </div>
+  </div>
+
+  <header class="bg-blue-600 py-4 px-4 sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-4xl md:text-5xl text-yellow-400 font-bold flicker glow-text font-press-start text-center flex-grow">
+        <p><i class="fas fa-video mr-3"></i> VIDEOCLUB <i class="fas fa-video fa-flip-horizontal mr-3"></i></p>
+      </h1>
+      <div class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
+        <i class="fas fa-clock mr-1"></i> OPEN 24H
+      </div>
+      <div id="searchButton" class="bg-gradient-to-r from-green-600 to-green-800 text-white px-3 py-1 rounded-md text-xl mx-4 cursor-pointer hover:scale-105 transition-transform">
+        <i class="fas fa-search mr-1"></i> SEARCH
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-black py-2 border-y-4 border-pink-500 mtb-7 overflow-hidden">
+    <ul class="flex animate-marquee text-2xl text-pink-400 space-x-8 items-center px-4">
+      <li class="flex-shrink-0"><i class="fas fa-film"></i> NEW ARRIVALS</li>
+      <li class="flex-shrink-0"><i class="fas fa-star"></i> CLASSIC MOVIES</li>
+      <li class="flex-shrink-0"><i class="fas fa-film"></i> SCI-FI & FANTASY</li>
+      <li class="flex-shrink-0"><i class="fas fa-star"></i> ACTION & ADVENTURE</li>
+      <li class="flex-shrink-0"><i class="fas fa-film"></i> NEW ARRIVALS</li>
+      <li class="flex-shrink-0"><i class="fas fa-star"></i> CLASSIC MOVIES</li>
+      <li class="flex-shrink-0"><i class="fas fa-film"></i> SCI-FI & FANTASY</li>
+      <li class="flex-shrink-0"><i class="fas fa-star"></i> ACTION & ADVENTURE</li>
+    </ul>
+  </div>
+
+  <main class="container mx-auto px-4 py-6 grid-pattern">
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl text-blue-400 border-b-2 border-blue-400 pb-1 inline-block">
+          <i class="fas fa-rocket mr-2"></i> SCI-FI & FANTASY
+        </h2>
+        <div class="text-xl text-white bg-purple-800 px-4 py-1 rounded-full">
+          <i class="fas fa-jedi mr-2"></i> OUT OF THIS WORLD
+        </div>
+      </div>
+      <div class="shelf bg-gradient-to-b from-indigo-900 to-indigo-800 p-6 rounded-lg mb-8 relative">
+        <div id="movie-catalog" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <!-- Películas se cargarán dinámicamente aquí -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-black text-white py-8 px-6 border-t-4 border-yellow-500">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-2xl text-yellow-400 mb-4">
+            <i class="fas fa-map-marker-alt mr-2"></i> FIND US
+          </h3>
+          <p class="mb-2">9303 Roslyndale Ave, Pacoima</p>
+          <p class="mb-2">California</p>
+          <p>OUTATIME</p>
+        </div>
+        <div>
+          <h3 class="text-2xl text-yellow-400 mb-4">
+            <i class="fas fa-clock mr-2"></i> HOURS
+          </h3>
+          <p class="mb-2">Mon-Fri: 00:00 - 24:59 </p>
+          <p class="mb-2">Sa-Sun: 00:00 - 24:59 </p>
+        </div>
+        <div>
+          <h3 class="text-2xl text-yellow-400 mb-4">
+            <i class="fas fa-info-circle mr-2"></i> ABOUT
+          </h3>
+          <p class="mb-4">Filmoteca personal para gente guay</p>
+          <div class="flex space-x-4 text-2xl">
+            <a href="#" class="text-blue-400 hover:text-blue-300"><i class="fab fa-facebook hover:scale-110"></i></a>
+            <a href="#" class="text-pink-400 hover:text-pink-300"><i class="fab fa-instagram hover:scale-110"></i></a>
+            <a href="#" class="text-red-400 hover:text-red-300"><i class="fab fa-youtube hover:scale-110"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 pt-6 border-t border-gray-700 text-center">
+        <p class="text-gray-400">&copy; 1985 VideoClub.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ------------------------------------------------------------
+    // 1) Datos de películas (ahora con videoUrl, releaseDate y description)
+    // ------------------------------------------------------------
+    const movieCatalog = [
+      {
+        id: 1,
+        title: "Evangelion 2.22",
+        year: "2009",
+        rating: "PG18",
+        price: "$24.99",
+        format: "DVD",
+        image: "/imagenes/Evangelion+2.0+-+You+can+(not)+advance_.jpg",
+        genre: "Sci-Fi",
+        videoUrl: "https://tfc-videoclub.s3.us-east-1.amazonaws.com/Evangelion+2.0+-+You+can+(not)+advance.mp4",
+        releaseDate: "2009-06-27",
+        description: "Bajo el constante ataque de los Ángeles, NERV introduce a dos nuevos pilotos…"
+      },
+      {
+        id: 2,
+        title: "Akira",
+        year: "1988",
+        rating: "R",
+        price: "$22.99",
+        format: "Blu‑ray",
+        image: "/imagenes/akira.jpg",
+        genre: "Sci‑Fi",
+        videoUrl: "https://tfc-videoclub.s3.us-east-1.amazonaws.com/AnimePahe_Akira_-_01_BD_1012p_niizk.mp4",
+        releaseDate: "1988-07-16",
+        description: "En una Neo‑Tokio post-apocalíptica, Kaneda y Tetsuo se ven envueltos en un experimento…"
+      },
+      {
+        id: 3,
+        title: "Regreso al Futuro",
+        year: "1985",
+        rating: "PG",
+        price: "$70.99",
+        format: "DVD",
+        image: "/imagenes/backtothefuture.jpg",
+        genre: "Sci‑Fi",
+        videoUrl: "https://tfc-videoclub.s3.us-east-1.amazonaws.com/Back.to.the.Future.1985.mp4",
+        releaseDate: "1985-07-03",
+        description: "Marty McFly, a 17-year-old high school student, is accidentally sent 30 years into the past in a time-traveling DeLorean invented by his close friend, the maverick scientist Doc Brown."
+      },
+      {
+        id: 4,
+        title: "El quinto elemento",
+        year: "1997",
+        rating: "PG13",
+        price: "$29.99",
+        format: "DVD",
+        image: "/imagenes/5.jpg",
+        genre: "Sci‑Fi",
+        videoUrl: "https://tfc-videoclub.s3.us-east-1.amazonaws.com/The+Fifth+Element.mp4",
+        releaseDate: "1997-05-30",
+        description: "Cada 5.000 años se abre una puerta entre dos dimensiones. En una dimensión existe el Universo y la vida. En la otra dimensión existe un elemento que no está hecho ni de tierra, ni de fuego, ni de aire, ni de agua, sino que es una anti-energía, la anti-vida: es el quinto elemento."
+      },
+      {
+        id: 5,
+        title: "Pesadilla en Elm Street",
+        year: "1984",
+        rating: "R",
+        price: "$27.99",
+        format: "DVD",
+        image: "/imagenes/freddy.jpg",
+        genre: "Horror",
+        videoUrl: "https://tfc-videoclub.s3.us-east-1.amazonaws.com/A+Nightmare+on+Elm+Street+1984+Bluray-720p.mp4",
+        releaseDate: "1985-09-18",
+        description: "Varios jóvenes de una pequeña localidad tienen habitualmente pesadillas en las que son perseguidos por un hombre deformado por el fuego y que usa un guante terminado en afiladas cuchillas."
+      },
+      {
+        id: 6,
+        title: "Taxi Driver",
+        year: "1976",
+        rating: "R",
+        price: "$15.99",
+        format: "DVD",
+        image: "/imagenes/taxi.jpg",
+        genre: "Thriller",
+        videoUrl: "https://tfc-videoclub.s3.us-east-1.amazonaws.com/U3vTFKbCzqEq.mp4",
+        releaseDate: "1977-03-10",
+        description: "Para sobrellevar el insomnio crónico que sufre desde su regreso de Vietnam, Travis Bickle trabaja como taxista nocturno en Nueva York."
+      }
+    ];
+
+    let currentMovies = [];
+
+    // ------------------------------------------------------------
+    // 2) Función para mezclar aleatoriamente el array
+    // ------------------------------------------------------------
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // ------------------------------------------------------------
+    // 3) Función para buscar películas (filtrar por título)
+    // ------------------------------------------------------------
+    function searchMovies(query) {
+      const normalizedQuery = query.toLowerCase().trim();
+      if (normalizedQuery === "") {
+        // Si no hay texto, devolvemos todo (mezclado)
+        return shuffleArray([...movieCatalog]);
+      }
+      return movieCatalog.filter(movie =>
+        movie.title.toLowerCase().includes(normalizedQuery)
+      );
+    }
+
+    // ------------------------------------------------------------
+    // 4) Función para renderizar (mostrar) las películas en el grid
+    // ------------------------------------------------------------
+    function renderMovies(movies = movieCatalog) {
+      const catalogContainer = document.getElementById('movie-catalog');
+      catalogContainer.innerHTML = '';
+      currentMovies = [...movies];
+
+      movies.forEach(movie => {
+        // Codificamos cada valor para la query string
+        const encodedVideo = encodeURIComponent(movie.videoUrl || "");
+        const encodedTitle = encodeURIComponent(movie.title);
+        const encodedDate  = encodeURIComponent(movie.releaseDate || "");
+        const encodedDesc  = encodeURIComponent(movie.description || "");
+
+        const movieElement = document.createElement('div');
+        movieElement.className = 'vhs-tape bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-3 relative h-64 flex flex-col cursor-pointer';
+        movieElement.innerHTML = `
+          <div class="flex-grow min-h-0 bg-black border-2 border-gray-600 flex flex-col overflow-hidden">
+            <a href="/movies/movies.html?video=${encodedVideo}&title=${encodedTitle}&date=${encodedDate}&desc=${encodedDesc}"
+               class="flex-shrink-0 h-3/4 overflow-hidden">
+              <img src="${movie.image}" alt="${movie.title}" class="h-full w-full object-cover object-top">
+            </a>
+            <div class="p-2 mt-auto text-center">
+              <h3 class="text-white font-bold truncate">${movie.title}</h3>
+              <p class="text-yellow-400 text-sm line-clamp-2">
+                ${movie.year} • ${movie.rating} • ${movie.price}
+              </p>
             </div>
-            <div class="bg-gradient-to-r from-green-600 to-green-800 text-white px-3 py-1 rounded-md text-xl mx-4 cursor-pointer hover:scale-105 transition-transform">
-            <i class="fas fa-search mr-1"></i> SEARCH
-        </div>
-        </div>
-    </header>
-        <div class="bg-black py-2 border-y-4 border-pink-500 mtb-7 overflow-hidden">
-            <ul class="flex animate-marquee text-2xl text-pink-400 space-x-8 items-center px-4">
-            <li class="flex-shrink-0"><i class="fas fa-film"></i> NEW ARRIVALS</li>
-            <li class="flex-shrink-0"><i class="fas fa-star"></i> CLASSIC MOVIES</li>
-            <li class="flex-shrink-0"><i class="fas fa-film"></i> SCI-FI & FANTASY</li>
-            <li class="flex-shrink-0"><i class="fas fa-star"></i> ACTION & ADVENTURE</li>
-            <li class="flex-shrink-0"><i class="fas fa-film"></i> NEW ARRIVALS</li>
-            <li class="flex-shrink-0"><i class="fas fa-star"></i> CLASSIC MOVIES</li>
-            <li class="flex-shrink-0"><i class="fas fa-film"></i> SCI-FI & FANTASY</li>
-            <li class="flex-shrink-0"><i class="fas fa-star"></i> ACTION & ADVENTURE</li>
-            </ul>
-            <style>
-            .animate-marquee {
-                display: flex;
-                animation: marquee 15s linear infinite;
-            }
+          </div>
+          <div class="absolute top-2 right-2 bg-red-600 text-white text-xs px-1 rounded">${movie.format}</div>
+        `;
+        catalogContainer.appendChild(movieElement);
+      });
 
-            @keyframes marquee {
-                0% {
-                transform: translateX(100%);
-                }
-                100% {
-                transform: translateX(-100%);
-                }
-            }
-            </style>
-        </div>
-        <main class="container mx-auto px-4 py-6 grid-pattern">
-            <section class="mb-12">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl text-blue-400 border-b-2 border-blue-400 pb-1 inline-block">
-                        <i class="fas fa-rocket mr-2"></i> SCI-FI & FANTASY
-                    </h2>
-                    <div class="text-xl text-white bg-purple-800 px-4 py-1 rounded-full">
-                        <i class="fas fa-jedi mr-2"></i> OUT OF THIS WORLD
-                    </div>
-                </div>
-               
-                <div class="shelf bg-gradient-to-b from-indigo-900 to-indigo-800 p-6 rounded-lg mb-8 relative">
-                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                      
-                        <div class="vhs-tape bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-3 relative h-64 flex flex-col cursor-pointer">
-                            <div class="flex-grow min-h-0 bg-black border-2 border-gray-600 flex flex-col overflow-hidden">
-                                <a href="/movies/movies.html" class="flex-shrink-0 h-3/4 overflow-hidden">
-                                    <img src="/imagenes/Evangelion+2.0+-+You+can+(not)+advance_.jpg" alt="Movie Cover"
-                                         class="h-full w-full object-cover object-top">
-                                </a>
-                                <div class="p-2 mt-auto text-center">
-                                    <h3 class="text-white font-bold truncate">Evangelion 2.22</h3>
-                                    <p class="text-yellow-400 text-sm line-clamp-2">2009 • PG18 • $24.99</p>
-                                </div>
-                            </div>
-                            <div class="absolute top-2 right-2 bg-red-600 text-white text-xs px-1 rounded">DVD</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-        <footer class="bg-black text-white py-8 px-6 border-t-4 border-yellow-500">
-            <div class="container mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div>
-                        <h3 class="text-2xl text-yellow-400 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i> FIND US
-                        </h3>
-                        <p class="mb-2">9303 Roslyndale Ave, Pacoima</p>
-                        <p class="mb-2">California</p>
-                        <p>OUTATIME</p>
-                    </div>
+      applyTapeEffects();
+    }
 
-                    <div>
-                        <h3 class="text-2xl text-yellow-400 mb-4">
-                            <i class="fas fa-clock mr-2"></i> HOURS
-                        </h3>
-                        <p class="mb-2">Mon-Fri: 00:00 - 24:59 </p>
-                        <p class="mb-2">Sa-Sun: 00:00 - 24:59 </p>
-                    </div>
+    // ------------------------------------------------------------
+    // 5) Al escribir en el input, filtramos el grid en “vivo”
+    // ------------------------------------------------------------
+    function handleSearchInput(e) {
+      const query = e.target.value;
+      const filtered = searchMovies(query);
+      renderMovies(filtered);
+    }
 
-                    <div>
-                        <h3 class="text-2xl text-yellow-400 mb-4">
-                            <i class="fas fa-info-circle mr-2"></i> ABOUT
-                        </h3>
-                        <p class="mb-4">Filmoteca personal para gente guay</p>
-                        <div class="flex space-x-4 text-2xl">
-                            <a href="#" class="text-blue-400 hover:text-blue-300"><i class="fab fa-facebook hover:scale-110"></i></a>
-                            <a href="#" class="text-pink-400 hover:text-pink-300"><i class="fab fa-instagram hover:scale-110"></i></a>
-                            <a href="#" class="text-red-400 hover:text-red-300"><i class="fab fa-youtube hover:scale-110"></i></a>
-                        </div>
-                    </div>
-                </div>
+    // ------------------------------------------------------------
+    // 6) “Confirmar” búsqueda al presionar Enter: cerrar modal
+    //    y dejar el grid con los resultados filtrados
+    // ------------------------------------------------------------
+    function finalizeSearch(query) {
+      const filtered = searchMovies(query);
+      renderMovies(filtered);
+      document.getElementById('searchModal').style.display = 'none';
+      // NOTA: No reiniciamos el valor del input ni volvemos a renderizar todo.
+      // Así, si el usuario reabre el modal, verá el texto que quedó.
+    }
 
-                <div class="mt-8 pt-6 border-t border-gray-700 text-center">
-                    <p class="text-gray-400">
-                        &copy; 1985 VideoClub.
-                    </p>
-                </div>
-            </div>
-        </footer>
-      
-        <script>
+    // ------------------------------------------------------------
+    // 7) Abrir y cerrar modal de búsqueda “normal” (sin filtrar)
+    //    - closeSearchModal: cierra + reinicia input + renderiza TODO
+    // ------------------------------------------------------------
+    function openSearchModal() {
+      const modal = document.getElementById('searchModal');
+      modal.style.display = 'flex';
+      document.getElementById('searchInput').focus();
+    }
+    function closeSearchModal() {
+      const modal = document.getElementById('searchModal');
+      modal.style.display = 'none';
+      // Al cerrar normalmente, vaciamos el campo y restauramos catálogo completo
+      document.getElementById('searchInput').value = '';
+      renderMovies(shuffleArray([...movieCatalog]));
+    }
 
-            document.querySelectorAll('.vhs-tape').forEach(tape => {
-                tape.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-15px) rotateY(15deg)';
-                    this.style.boxShadow = '0 15px 25px rgba(255, 215, 0, 0.5)';
-                });
+    // ------------------------------------------------------------
+    // 8) Efectos hover en las “cintas” (vhs-tape)
+    // ------------------------------------------------------------
+    function applyTapeEffects() {
+      document.querySelectorAll('.vhs-tape').forEach(tape => {
+        tape.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-15px) rotateY(15deg)';
+          this.style.boxShadow = '0 15px 25px rgba(255, 215, 0, 0.5)';
+        });
+        tape.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) rotateY(0)';
+          this.style.boxShadow = 'none';
+        });
+      });
+    }
 
-                tape.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) rotateY(0)';
-                    this.style.boxShadow = 'none';
-                });
-            });
+    // ------------------------------------------------------------
+    // 9) “Fondo en movimiento” en el header
+    // ------------------------------------------------------------
+    const header = document.querySelector('header');
+    setInterval(() => {
+      header.style.backgroundPosition = `${Math.random() * 100}% ${Math.random() * 100}%`;
+    }, 100);
 
-            const header = document.querySelector('header');
-            setInterval(() => {
-                header.style.backgroundPosition = `${Math.random() * 100}% ${Math.random() * 100}%`;
-            }, 100);
-        </script>
-    </body>
+    // ------------------------------------------------------------
+    // 10) Listeners de la página
+    // ------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      // Renderizamos todo el catálogo en un orden aleatorio al cargar
+      renderMovies(shuffleArray([...movieCatalog]));
+
+      // Botones de abrir/cerrar modal
+      document.getElementById('searchButton').addEventListener('click', openSearchModal);
+      document.getElementById('closeSearch').addEventListener('click', closeSearchModal);
+
+      // Cerrar modal al pulsar fuera del contenido
+      document.getElementById('searchModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('searchModal')) {
+          closeSearchModal();
+        }
+      });
+
+      // Filtrado “en vivo” al escribir
+      document.getElementById('searchInput').addEventListener('input', handleSearchInput);
+
+      // Confirmar búsqueda al presionar Enter
+      document.getElementById('searchInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          finalizeSearch(e.target.value);
+        }
+      });
+    });
+  </script>
+</body>
 </html>
