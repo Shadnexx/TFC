@@ -1,76 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Viewer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Viewer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="../style.css" />
 </head>
 <body class="relative bg-black text-white">
-    <div class="crt-effect"></div>
-    <div class="scanlines"></div>
+  <div class="crt-effect"></div>
+  <div class="scanlines"></div>
 
-    <header class="bg-blue-600 py-4 px-4 sticky topz-50  border-yellow-500 border-b-4">
-      <div class="container w-auto h-auto mx-auto flex justify-between items-center">
-          <h1 class="text-4xl md:text-5xl text-yellow-400 font-bold flicker glow-text font-press-start text-center flex-grow">
-              <p class="text-center"><i class="fas fa-video mr-3"></i> VIDEOCLUB <i class="fas fa-video fa-flip-horizontal mr-3"></i></p>
-          </h1>
-          <a href="/index.html">
-            <div class="bg-gradient-to-r from-red-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
-                <i class="fas fa-film mr-1"></i> BACK
-            </div>
-            </a>
-          <div class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
-              <i class="fas fa-clock mr-1"></i> OPEN 24H
-          </div>
-          <div class="bg-gradient-to-r from-green-600 to-green-800 text-white px-3 py-1 rounded-md text-xl mx-4 cursor-pointer hover:scale-105 transition-transform">
-          <i class="fas fa-search mr-1"></i> SEARCH
+  <header class="bg-blue-600 py-4 px-4 sticky top-0 border-yellow-500 border-b-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-4xl md:text-5xl text-yellow-400 font-bold flicker glow-text font-press-start text-center flex-grow">
+        <span><i class="fas fa-video mr-3"></i> VIDEOCLUB <i class="fas fa-video fa-flip-horizontal mr-3"></i></span>
+      </h1>
+      <a href="/index.html">
+        <div class="bg-gradient-to-r from-red-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
+          <i class="fas fa-film mr-1"></i> BACK
+        </div>
+      </a>
+      <div class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white px-3 py-1 rounded-md text-xl ml-4">
+        <i class="fas fa-clock mr-1"></i> OPEN 24H
       </div>
+      <div id="searchButton" class="bg-gradient-to-r from-green-600 to-green-800 text-white px-3 py-1 rounded-md text-xl mx-4 cursor-pointer hover:scale-105 transition-transform">
+        <i class="fas fa-search mr-1"></i> SEARCH
       </div>
+    </div>
   </header>
-    <main class="container mx-auto px-4 py-6">
-        <div class="flex flex-col lg:flex-row gap-8">
-            <div class="flex-1">
-                <div class="relative bg-black border-4 border-yellow-500 rounded-lg overflow-hidden">
-                    <iframe
-                        src="https://tfc-videoclub.s3.us-east-1.amazonaws.com/Evangelion+2.0+-+You+can+(not)+advance.mp4"
-                        title="Video Player"
-                        class="w-full h-64 md:h-96 lg:h-[500px]"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <h2 class="text-3xl text-yellow-400 font-bold mt-4">Evangelion 2.22 You can (not) advance </h2>
-                <p class="text-gray-400 text-sm mt-2">Estrenado 27 de junio de 2009</p>
-                <p class="mt-4 text-white">
-                  Bajo el constante ataque de los Ángeles, NERV introduce a dos nuevos pilotos: la misteriosa Makinami Mari Illustrous y la intensa Asuka Langley Shikinami.Gendo Ikari y SEELE tienen un proyecto secreto que involucra tanto a Rei como a Shinji.
-                </p>
+
+  <main class="container mx-auto px-4 py-6">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- ==============================
+           Sección principal (reproductor dinámico + metadatos)
+           ============================== -->
+      <div class="flex-1">
+        <div class="relative bg-black border-4 border-yellow-500 rounded-lg overflow-hidden">
+          <!--
+             1) Cambiamos src="" y le damos id="videoFrame"
+             para actualizarlo dinámicamente desde JS
+          -->
+          <iframe
+            id="videoFrame"
+            src=""
+            title="Video Player"
+            class="w-full h-64 md:h-96 lg:h-[500px]"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <!-- 2) Ponemos IDs para inyectar título, fecha y descripción -->
+        <h2 id="videoTitle" class="text-3xl text-yellow-400 font-bold mt-4">Cargando...</h2>
+        <p id="videoDate" class="text-gray-400 text-sm mt-2"></p>
+        <p id="videoDesc" class="mt-4 text-white"></p>
+      </div>
+
+      <!-- ==============================
+           Sección “Puedes ver …” (relacionados)
+           (Puedes dejar estática o añadirla dinámicamente si quieres)
+           ============================== -->
+      <aside class="w-full lg:w-1/3">
+        <h3 class="text-2xl text-pink-400 font-bold mb-4">
+          <i class="fas fa-film mr-2"></i> Puedes ver …
+        </h3>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4 bg-gradient-to-b from-gray-800 to-gray-900 p-3 rounded-lg cursor-pointer hover:shadow-lg">
+            <img src="/imagenes/portada.jpg" alt="Related Video" class="w-24 h-16 object-cover rounded">
+            <div>
+              <h4 class="text-white font-bold truncate">El castillo ambulante</h4>
+              <p class="text-yellow-400 text-sm">2004 • PG-13</p>
             </div>
-            <aside class="w-full lg:w-1/3">
-                <h3 class="text-2xl text-pink-400 font-bold mb-4">
-                    <i class="fas fa-film mr-2"></i> Puedes ver ...
-                </h3>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4 bg-gradient-to-b from-gray-800 to-gray-900 p-3 rounded-lg cursor-pointer hover:shadow-lg">
-                        <img src="/imagenes/portada.jpg" alt="Related Video" class="w-24 h-16 object-cover rounded">
-                        <div>
-                            <h4 class="text-white font-bold truncate">El castillo ambulante</h4>
-                            <p class="text-yellow-400 text-sm">2004 • PG-13</p>
-                        </div>
-                    </div>
-                </div>
-            </aside>
+          </div>
         </div>
-    </main>
-    <footer class="bg-black text-white py-8 px-6 border-t-4 border-yellow-500">
-        <div class="container mx-auto text-center">
-            <p class="text-gray-400">
-                &copy; 1993 Retro VideoClub.
-            </p>
-        </div>
-    </footer>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="bg-black text-white py-8 px-6 border-t-4 border-yellow-500">
+    <div class="container mx-auto text-center">
+      <p class="text-gray-400">&copy; 1993 Retro VideoClub.</p>
+    </div>
+  </footer>
+
+  <!-- ================================================================================
+       3) Script que lee los parámetros de la URL y carga el video + textos
+       ================================================================================ -->
+  <script>
+    // Función auxiliar para leer un parámetro de la query string
+    function getParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 3.1) Leemos los 4 parámetros (codificados con encodeURIComponent)
+      const rawVideo = getParam('video');
+      const rawTitle = getParam('title');
+      const rawDate  = getParam('date');
+      const rawDesc  = getParam('desc');
+
+      const iframe     = document.getElementById('videoFrame');
+      const titleNode  = document.getElementById('videoTitle');
+      const dateNode   = document.getElementById('videoDate');
+      const descNode   = document.getElementById('videoDesc');
+
+      // 3.2) Si no llega “video”, mostramos mensaje de error
+      if (!rawVideo) {
+        titleNode.textContent = 'Película no especificada';
+        descNode.textContent = 'Selecciona una película en el catálogo.';
+        return;
+      }
+
+      // 3.3) Decodificamos cada valor
+      const videoUrl  = decodeURIComponent(rawVideo);
+      const titleText = rawTitle ? decodeURIComponent(rawTitle) : 'Título desconocido';
+      const dateText  = rawDate  ? decodeURIComponent(rawDate)  : '';
+      const descText  = rawDesc  ? decodeURIComponent(rawDesc)  : '';
+
+      // 3.4) Seteamos src del iframe y los textos
+      iframe.src = videoUrl;
+      titleNode.textContent = titleText;
+      if (dateText) {
+        dateNode.textContent = `Estrenado ${dateText}`;
+      }
+      if (descText) {
+        descNode.textContent = descText;
+      }
+    });
+  </script>
 </body>
 </html>
